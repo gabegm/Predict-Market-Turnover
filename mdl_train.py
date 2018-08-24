@@ -1,11 +1,12 @@
-from functions import encode_labels
 import pickle
 from argparse import ArgumentParser
 
 import numpy as np
 import pandas as pd
+from sklearn.model_selection import GridSearchCV
 from sklearn.tree import DecisionTreeRegressor
 
+from functions import encode_labels
 
 if __name__ == "__main__":
     parser = ArgumentParser()
@@ -39,10 +40,20 @@ if __name__ == "__main__":
     # target values
     y = list(df1['turnover'])
 
-    mdl = DecisionTreeRegressor().fit(X, y)
-    print(mdl)
+    dtr = DecisionTreeRegressor()
+
+    # Set the parameters by cross-validation
+    parameters = [
+        {
+            'max_features': ['sqrt', 'log2', None],
+            'max_depth': range(2, 1000),
+        }
+    ]
+
+    clf = GridSearchCV(dtr, parameters)
+    clf.fit(X, y)
 
     # make predictions
-    pred = mdl.predict(df1[features])
+    pred = clf.predict(df1[features])
 
-    s = pickle.dump(mdl, open("model/mdl.obj", "wb"))
+    s = pickle.dump(clf, open("model/mdl.obj", "wb"))

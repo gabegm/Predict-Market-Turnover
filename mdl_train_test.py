@@ -1,11 +1,13 @@
-from functions import encode_labels_test
 import random as rand
 from argparse import ArgumentParser
 
 import numpy as np
 import pandas as pd
 from sklearn.metrics import mean_squared_error, r2_score
+from sklearn.model_selection import GridSearchCV
 from sklearn.tree import DecisionTreeRegressor
+
+from functions import encode_labels_test
 
 
 def split_dataset(df):
@@ -59,13 +61,24 @@ if __name__ == "__main__":
     # target values
     y = list(train['turnover'])
 
-    mdl = DecisionTreeRegressor().fit(X, y)
+    dtr = DecisionTreeRegressor()
 
+    # Set the parameters by cross-validation
+    parameters = [
+        {
+            'max_features': ['sqrt', 'log2', None],
+            'max_depth': range(2, 1000),
+        }
+    ]
+
+    clf = GridSearchCV(dtr, parameters)
+    clf.fit(X, y)
+    
     # make predictions
-    pred = mdl.predict(test[features])
+    pred = clf.predict(test[features])
 
     results = pd.DataFrame(
-        data = {
+        data={
             'original': test['turnover'],
             'prediction': pred
         },
@@ -76,10 +89,10 @@ if __name__ == "__main__":
     r2 = r2_score(test['turnover'].values, pred)
     rms = mean_squared_error(test['turnover'].values, pred)
     metrics = pd.DataFrame(
-        data = {
+        data={
             'r2_score': r2, 'mean_squared_error': rms
         },
-        index = [0]
+        index=[0]
     )
 
     results.to_csv('data/metrics/results.csv')
