@@ -4,7 +4,6 @@ from argparse import ArgumentParser
 import numpy as np
 import pandas as pd
 from sklearn.metrics import mean_squared_error, r2_score
-from sklearn.model_selection import GridSearchCV
 from sklearn.tree import DecisionTreeRegressor
 
 from functions import encode_labels_test
@@ -61,21 +60,12 @@ if __name__ == "__main__":
     # target values
     y = list(train['turnover'])
 
-    dtr = DecisionTreeRegressor()
+    mdl = DecisionTreeRegressor()
 
-    # Set the parameters by cross-validation
-    parameters = [
-        {
-            'max_features': ['sqrt', 'log2', None],
-            'max_depth': range(2, 1000),
-        }
-    ]
-
-    clf = GridSearchCV(dtr, parameters)
-    clf.fit(X, y)
+    mdl.fit(X, y)
     
     # make predictions
-    pred = clf.predict(test[features])
+    pred = mdl.predict(test[features])
 
     results = pd.DataFrame(
         data={
@@ -95,5 +85,5 @@ if __name__ == "__main__":
         index=[0]
     )
 
-    results.to_csv('../data/metrics/results.csv')
-    metrics.to_csv('../data/metrics/metrics.csv')
+    results.to_csv('data/metrics/results.csv')
+    metrics.to_csv('data/metrics/metrics.csv')

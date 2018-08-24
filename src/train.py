@@ -3,7 +3,6 @@ from argparse import ArgumentParser
 
 import numpy as np
 import pandas as pd
-from sklearn.model_selection import GridSearchCV
 from sklearn.tree import DecisionTreeRegressor
 
 from functions import encode_labels
@@ -40,24 +39,11 @@ if __name__ == "__main__":
     # target values
     y = list(df1['turnover'])
 
-    dtr = DecisionTreeRegressor()
+    mdl = DecisionTreeRegressor()
 
-    # Set the parameters by cross-validation
-    parameters = [
-        {
-            'max_features': ['sqrt', 'log2', None],
-            'max_depth': range(2, 1000),
-        }
-    ]
-
-    clf = GridSearchCV(dtr, parameters)
-    clf.fit(X, y)
-
-    print(clf.best_params_)
-
-    print(sorted(clf.cv_results_.keys()))
+    mdl.fit(X, y)
 
     # make predictions
-    pred = clf.predict(df1[features])
+    pred = mdl.predict(df1[features])
 
-    s = pickle.dump(clf, open("model/mdl.obj", "wb"))
+    s = pickle.dump(mdl, open("model/mdl.obj", "wb"))

@@ -16,8 +16,8 @@ if __name__ == "__main__":
 
     df = pd.read_csv(args.filename)
 
-    pred = pd.read_csv('../data/predict_results.csv')
+    pred = pd.read_csv('data/predict_results.csv')
 
     df['turnover'] = pred['turnover']
 
-    df.to_csv('../data/final.csv')
+    df.to_csv('data/final.csv')
