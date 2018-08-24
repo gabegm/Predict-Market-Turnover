@@ -95,5 +95,5 @@ if __name__ == "__main__":
         index=[0]
     )
 
-    results.to_csv('data/metrics/results.csv')
-    metrics.to_csv('data/metrics/metrics.csv')
+    results.to_csv('../data/metrics/results.csv')
+    metrics.to_csv('../data/metrics/metrics.csv')

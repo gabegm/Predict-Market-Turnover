@@ -53,6 +53,10 @@ if __name__ == "__main__":
     clf = GridSearchCV(dtr, parameters)
     clf.fit(X, y)
 
+    print(clf.best_params_)
+
+    print(sorted(clf.cv_results_.keys()))
+
     # make predictions
     pred = clf.predict(df1[features])
 
