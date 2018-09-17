@@ -43,7 +43,4 @@ if __name__ == "__main__":
 
     mdl.fit(X, y)
 
-    # make predictions
-    pred = mdl.predict(df1[features])
-
     s = pickle.dump(mdl, open("model/mdl.obj", "wb"))

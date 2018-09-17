@@ -3,3 +3,4 @@ src/__pycache__/
 .cache/
 .ipynb_checkpoints/
 .DS_Store
+.pytest_cache/
